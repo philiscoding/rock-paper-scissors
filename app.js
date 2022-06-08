@@ -1,4 +1,3 @@
-// PSEUDOCODE STUFF
 // INITIALIZE RANDOM NUMBER FUNCTION WITH RANGE
 function random(myMin, myMax) {
     return Math.floor(Math.random() * (myMax - myMin + 1) + myMin);
@@ -6,7 +5,7 @@ function random(myMin, myMax) {
 
 //RANDOM ROCK PAPER SCISSOR
 function computerPlay() {
-    
+
     // 1 === ROCK, 2 === PAPER , 3 === SCISSORS
     switch (random(1, 3)) {
         case 1:
@@ -16,7 +15,7 @@ function computerPlay() {
             return "paper";
             break;
         case 3:
-            return "scissors";
+            return "scissor";
             break;
         default:
             return "error!";
@@ -27,56 +26,66 @@ function computerPlay() {
 function playRound(playerSelection, computerSelection) {
 
     // CASE INSENSITIVE
-    playerSelection = playerSelection.toString().toLowerCase();
+
 
     if (playerSelection === computerSelection) {
         return "Draw!";
     } else if (playerSelection == "rock" && computerSelection == "paper") {
         return "Lose!";
-    } else if (playerSelection == "rock" && computerSelection == "scissors") {
+    } else if (playerSelection == "rock" && computerSelection == "scissor") {
         return "Win!";
-    } else if (playerSelection == "paper" && computerSelection == "scissors") {
+    } else if (playerSelection == "paper" && computerSelection == "scissor") {
         return "Lose!";
     } else if (playerSelection == "paper" && computerSelection == "rock") {
         return "Win!";
-    } else if (playerSelection == "scissors" && computerSelection == "rock") {
+    } else if (playerSelection == "scissor" && computerSelection == "rock") {
         return "Lose!";
-    } else if (playerSelection == "scissors" && computerSelection == "paper") {
+    } else if (playerSelection == "scissor" && computerSelection == "paper") {
         return "Win!";
     }
 }
 
-// PLAY OUT 5 ROUNDS AND DETERMINE WINNER
-function game() {
 
-    //TRACK SCORES
-    let playerCount = 0;
-    let computerCount = 0;
 
-    //PLAY 5 ROUNDS
-    for (let i = 0; i < 5; i++) {
 
-        playerSelection = prompt("What do you select?");
-        let currentRound = playRound(playerSelection, computerPlay());
-        console.log(currentRound);
-        if (currentRound == "Win!") {
-            playerCount = playerCount + 1;
+const rockButton = document.querySelector(".rock");
+const paperButton = document.querySelector(".paper");
+const scissorButton = document.querySelector(".scissor");
 
-        } else if (currentRound == "Lose!") {
-            computerCount = computerCount + 1;
+rockButton.addEventListener("click", () => console.log(updateScore(rockButton)));
+paperButton.addEventListener("click", () => console.log(updateScore(paperButton)));
+scissorButton.addEventListener("click", () => console.log(updateScore(scissorButton)));
 
-        } else if (currentRound == "Draw!") {
-            i--
-            playerSelection = prompt("What do you select?");
-            currentRound = playRound(playerSelection, computerPlay());
-        }
+const playerScore = document.querySelector(".player-score");
+const computerScore = document.querySelector(".computer-score");
+const roundScore = document.querySelector(".round-score");
+let playerScoreCount = 0;
+let computerScoreCount = 0;
+let roundScoreCount = 0;
+
+function updateScore(clickedButton) {
+
+    let result = playRound(clickedButton.className, computerPlay());
+    console.log(result);
+    if (result == "Win!") {
+        playerScoreCount = playerScoreCount + 1;
+        playerScore.textContent = `${playerScoreCount}`;
+        roundScoreCount = roundScoreCount + 1;
+        roundScore.textContent = `${roundScoreCount}`
+    } else if (result == "Lose!") {
+        computerScoreCount = computerScoreCount + 1;
+        computerScore.textContent = `${computerScoreCount}`;
+        roundScoreCount = roundScoreCount + 1;
+        roundScore.textContent = `${roundScoreCount}`
+    } else {
+        alert("DRAW!");
     }
-
-    //PRINT WINNER
-    let result = "";
-    if (playerCount > computerCount) {
-        result = "You win! Computer loses.";
-    } else result = "You lose! Computer wins.";
-
-    return result;
+    if (roundScoreCount === 5) {
+        if (playerScoreCount > computerScoreCount) {
+            alert("You win!");
+        } else {
+            alert("Computer wins!");
+        }
+        window.location.reload()
+    }
 }
